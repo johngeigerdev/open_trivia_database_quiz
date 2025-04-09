@@ -18,7 +18,7 @@ function QuestionDisplay({ questionData }) {
         setIsCorrect(normalizedUserAnswer === normalizedCorrectAnswer)
     };
 
-   // Combine correct + incorrect answers and shuffle them
+   // Combine correct + incorrect answers and shuffle them so they are displayed randomly
    const allAnswers = [...questionData.incorrect_answers, questionData.correct_answer].sort(() => Math.random() - 0.5);
 
 
@@ -27,20 +27,21 @@ function QuestionDisplay({ questionData }) {
             <h2 dangerouslySetInnerHTML={{ __html: questionData.question }} />
             <form onSubmit={handleSubmit}>
                 <select
-                    required 
+                    required
+                    disabled = {isCorrect !== null} // This locks the user's choice in when they click submit, they can't change it afterwards
                     id="answer"
                     name="answer"
                     value={userAnswer}
                     onChange = {(event) => setUserAnswer(event.target.value)}
                 >
-                    <option value = ''> Select and Answer</option>
+                    <option value = ''> Select an Answer</option>
                     {allAnswers.map((answer, index) => (
                         <option key={index} value={answer}>
                             {answer}
                         </option>
                     ))}
                 </select>
-                <button type="submit">Submit</button>
+                <button type="submit" disabled={isCorrect !== null}>Submit</button>
             </form>
 
             {isCorrect !== null && (

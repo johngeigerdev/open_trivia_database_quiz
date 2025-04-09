@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import QuestionDisplay from './QuestionDisplay'; // Importing the QuestionDisplay component
+import { decode } from 'html-entities'; // Importing the decode function from html-entities to decode HTML entities in the question text
+// This component allows the user to select a trivia question type and fetch questions from the Open Trivia Database API without special HTML symbols
 
 function SelectQuestionType() {
     const [user, setUser] = useState('');
@@ -100,7 +103,8 @@ function SelectQuestionType() {
                         {questions.map((q, index) => (
                             <option key={index} value={index}>
                                 {/* the below line 'truncates' the questions to 80 characters and adds '...' if the question is longer than 80 characters */}
-                                {q.question.length > 80 ? q.question.slice(0, 80) + '...' : q.question}
+                                {decode(q.question.length > 80 ? q.question.slice(0, 80) + '...' : q.question)} 
+                                {/* the 'decode' here is going to get all of those &#039; symols converted to the correct symbols */}
                             </option>
                         ))}
                     </select>
