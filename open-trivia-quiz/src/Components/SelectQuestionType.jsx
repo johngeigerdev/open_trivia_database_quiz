@@ -34,8 +34,7 @@ function SelectQuestionType() {
             setSuccess(true);
             setError('');
             //these 4 lines below are resetting the form back to blank/default after the form is submitted
-            setSelectedQuestionIndex(null); 
-            setUser(''); 
+            setSelectedQuestionIndex(null);
             setCategory('');
             setDifficulty('easy'); 
         } catch (error) {
@@ -47,6 +46,18 @@ function SelectQuestionType() {
     const handleQuestionSelect = (event) => {
         setSelectedQuestionIndex(parseInt(event.target.value));  //parseInt here is converting the string value of the index to an integer
     };
+    
+    //this resets the form after they click the 'start over' button
+    const handleReset = () => {
+        setUser('');
+        setDifficulty('easy')
+        setCategory('');
+        setQuestions([]);
+        setError('');
+        setSuccess(false);
+        setSelectedQuestionIndex(null);
+    };
+
 
     return (
         <div>
@@ -111,8 +122,17 @@ function SelectQuestionType() {
                 </>
             )}
 
+            {/* Button to reset going into it's own check to ensure it only shows if a question selected */}
             {selectedQuestionIndex !== null && (
-                <QuestionDisplay questionData={questions[selectedQuestionIndex]} />  //once the question is selected, it pass the questionData prop to the QuestionDisplay component
+                <button onClick={handleReset}>Start Over</button>
+            )}
+
+            {selectedQuestionIndex !== null && (
+                <QuestionDisplay questionData={questions[selectedQuestionIndex]}
+                user={user} // this is passing the user data as a prop to the QuestionDisplay component
+                />  //once the question is selected, it pass the questionData prop to the QuestionDisplay component
+                //we need to do this so that the user name is available in the QuestionDisplay.jsx component to display their name when 
+                //stating if they got the question right or not
             )}
         </div>
     );

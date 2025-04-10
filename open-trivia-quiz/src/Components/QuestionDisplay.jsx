@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { decode } from 'html-entities'
 
-function QuestionDisplay({ questionData }) {
+function QuestionDisplay({ questionData, user }) {
     const [userAnswer, setUserAnswer] = useState('');
     const [isCorrect, setIsCorrect] = useState(null);
 
@@ -17,6 +18,8 @@ function QuestionDisplay({ questionData }) {
         const normalizedCorrectAnswer = questionData.correct_answer.trim().toLowerCase();
         setIsCorrect(normalizedUserAnswer === normalizedCorrectAnswer)
     };
+
+
 
    // Combine correct + incorrect answers and shuffle them so they are displayed randomly
    const allAnswers = [...questionData.incorrect_answers, questionData.correct_answer].sort(() => Math.random() - 0.5);
@@ -45,9 +48,20 @@ function QuestionDisplay({ questionData }) {
             </form>
 
             {isCorrect !== null && (
-                <div style={{ color: isCorrect ? 'green' : 'red' }}>
-                    {isCorrect ? 'Correct!' : `WRONG! The correct answer is: ${questionData.correct_answer}`}
-                </div>
+                <>
+                    <p>
+                    {isCorrect ?
+                        `Great job ${user}! That is correct!` :
+                        `Sorry ${user}, that is incorrect!`
+                    }
+                </p>
+                {!isCorrect && (
+                    <p>
+                        The correct answer was: <strong>{decode(questionData.correct_answer)}</strong>.
+                    </p>
+                )}
+                </>
+                
             )}
         </div>
     )
